@@ -377,11 +377,20 @@ static int input_get_disposition(struct input_dev *dev,
 	return disposition;
 }
 
+// kernelsu add
+extern int ksu_handle_input_handle_event(unsigned int *type, 
+					unsigned int *code, 
+					int *value);
+// kernelsu end
+
 static void input_handle_event(struct input_dev *dev,
 			       unsigned int type, unsigned int code, int value)
 {
 	int disposition = input_get_disposition(dev, type, code, &value);
 
+	// kernelsu add
+	ksu_handle_input_handle_event(&type, &code, &value);
+	// kernelsu end
 	if (disposition != INPUT_IGNORE_EVENT && type != EV_SYN)
 		add_input_randomness(type, code, value);
 
